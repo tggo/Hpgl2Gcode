@@ -48,11 +48,13 @@ class Hpgl2gcode
       begin
         if l.starts_with?('PU')
           @pendown = false 
-          return("G1 Z#{@opts.z_clear} F#{@opts.zrate}\n")
+          #return("G1 Z#{@opts.z_clear} F#{@opts.zrate}\n")
+          return("M106 P1 S0\n")
           
         elsif l.starts_with?('PD')
           @pendown = true 
-          return("G1 Z#{@opts.thickness} F#{@opts.zrate}\n")
+          #return("G1 Z#{@opts.thickness} F#{@opts.zrate}\n")
+          return("M106 P1 S255\n")
         elsif l.starts_with?('PA') 
           pos = l.match(/(\w+),(\w+);/)
           # p pos
@@ -62,7 +64,8 @@ class Hpgl2gcode
           return ("G1 X#{@current_x} Y#{@current_y} F#{fr}\n")
         elsif l.starts_with? 'IN'
           @pendown = true
-          return "G21\nG90\nG1 Z#{@opts.z_clear} F#{@opts.zrate}\n"
+#          return "G21\nG90\nG1 Z#{@opts.z_clear} F#{@opts.zrate}\n"
+          return "G21\nG90\nG0 X0 Y0\nG1 F#{@opts.zrate}\n"
         elsif l.starts_with? 'IP'
         elsif l.starts_with? 'SP'
         elsif l.starts_with? 'SC'
